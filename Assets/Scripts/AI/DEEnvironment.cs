@@ -47,6 +47,7 @@ public class DEEnvironment : Environment
     private List<NNBrain> childBrains { get; set; } = new List<NNBrain>();
     private List<NNBrain> parentBrains { get; set; } = new List<NNBrain>();
     private List<GameObject> GObjects { get; } = new List<GameObject>();
+    // Object1とObjects2
     private List<HockeyAgent> Agents { get; } = new List<HockeyAgent>();
     private int Generation { get; set; }
     private List<AgentPair> AgentsSet { get; } = new List<AgentPair>();
