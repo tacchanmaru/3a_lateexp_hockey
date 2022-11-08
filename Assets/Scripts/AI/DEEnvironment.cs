@@ -235,7 +235,7 @@ public class DEEnvironment : Environment
         parentBrains = parentBrains.ToList();
         parentBrains.Sort(CompareBrains);
         //File.WriteAllText("BestBrain.json", JsonUtility.ToJson(parentBrains[0]));
-        parentBrains[0].Save("./Assets/BestBrain.txt");
+        parentBrains[0].Save("./Assets/StreamingAssets/ComputerBrains/DEBestBrain.txt");
 
         /***** EliteSelection *****/
         // 最も成績が良かった親の子は親と同じNNを持つ
