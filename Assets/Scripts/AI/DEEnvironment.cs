@@ -192,7 +192,7 @@ public class DEEnvironment : Environment
                 agent = nextAgent,
                 brain = nextBrain
             });
-            nextBrain.Save("./Assets/StreamingAssets/ComputerBrains/CURRENT.txt");
+            nextBrain.Save("./Assets/StreamingAssets/ComputerBrains/DECURRENT.txt");
         }
         UpdateText();
     }

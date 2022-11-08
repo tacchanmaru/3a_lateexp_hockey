@@ -207,4 +207,9 @@ public class NNBrain : Brain
         newBrain.SetDNA(newDNA);
         return newBrain;
     }
+
+    public NNBrain Mutate(int Generation){
+        
+    }
+    
 }
