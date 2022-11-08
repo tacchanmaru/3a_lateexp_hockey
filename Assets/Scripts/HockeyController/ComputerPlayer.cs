@@ -16,6 +16,7 @@ public class ComputerPlayer : MonoBehaviour
     private HockeyAgent agent;
 
     void Awake() {
+        // Debug.Log("hoge");
         brain = new NNBrain(InputSize, HiddenSize, HiddenLayers, OutputSize);
         agent = GetComponent<HockeyAgent>();
         computer_level = "EASY";
@@ -31,16 +32,25 @@ public class ComputerPlayer : MonoBehaviour
 
     //敵エージェントのレベルをEasyにセット
     public void SetEasyBrain() {
+        Debug.Log("EASY");
         SetComputerLevel("EASY");
     }
     //敵エージェントのレベルをMediumにセット
     public void SetMediumBrain() {
+        Debug.Log("MEDIUM");
         SetComputerLevel("MEDIUM");
     }
     //敵エージェントのレベルをHardにセット
     public void SetHardBrain() {
+        Debug.Log("HARD");
         SetComputerLevel("HARD");
     }
+    //敵エージェントのレベルをDEにセット
+    public void SetDEBrain() {
+        Debug.Log("DEBest");
+        SetComputerLevel("DEBest");
+    }
+
 
 
     // Update is called once per frame
