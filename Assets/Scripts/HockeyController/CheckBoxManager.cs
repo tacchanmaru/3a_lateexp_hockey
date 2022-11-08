@@ -9,6 +9,7 @@ public class CheckBoxManager : MonoBehaviour
     public GameObject EasyCheckBox;
     public GameObject MediumCheckBox;
     public GameObject HardCheckBox;
+    public GameObject DECheckBox;
     public GameObject MouseCheckBox;
     public GameObject KeyCheckBox;
 
@@ -24,6 +25,7 @@ public class CheckBoxManager : MonoBehaviour
         HardCheckBox.SetActive(false);
         MouseCheckBox.SetActive(false);
         KeyCheckBox.SetActive(false);
+        DECheckBox.SetActive(false);
     }
 
 
@@ -37,6 +39,7 @@ public class CheckBoxManager : MonoBehaviour
             EasyCheckBox.SetActive(true);
             MediumCheckBox.SetActive(true);
             HardCheckBox.SetActive(true);
+            DECheckBox.SetActive(true);
             MouseCheckBox.SetActive(true);
             KeyCheckBox.SetActive(true);
         } else {
@@ -46,6 +49,7 @@ public class CheckBoxManager : MonoBehaviour
             EasyCheckBox.SetActive(false);
             MediumCheckBox.SetActive(false);
             HardCheckBox.SetActive(false);
+            DECheckBox.SetActive(false);
             MouseCheckBox.SetActive(false);
             KeyCheckBox.SetActive(false);
         }
