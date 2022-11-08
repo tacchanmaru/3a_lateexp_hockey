@@ -186,8 +186,10 @@ https://ja.wikipedia.org/wiki/差分進化
 https://qiita.com/n-suzuki/items/b8d4ccc4b6936120567e
 
 # やること
+- DEの結果のうち最高のものを選べるようにする
 - QEnvironmentおよびNEEnvironmentをDEEnvironmentと同じように1:1で学習する構造に変える, 最も成績いいやつをq,neそれぞれのリンクにsaveする
 - Q学習、NE学習の実装を書く
 - GameModeManagerで学習の状況を変更
   - Auto:deの代わりにq,neを使えるようにする
   - Manual:apを変更, Awake()内のbrain_txtをq,neでの最も成績の良いやつのリンクに変える
+- 1:1でそれぞれ好きな機能を選べるような対戦形式にしたい
