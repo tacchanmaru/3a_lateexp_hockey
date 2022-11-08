@@ -56,7 +56,9 @@ public class DEEnvironment : Environment
     /***** Bool Objects For Snchronization With Opponent Player *****/
     // Getter and Setter should be written?
     public bool WaitingFlag = false;
+    //agentが変わる時のフラグ
     public bool RestartFlag = false;
+    //ゴールが決まった時のフラグ
     public bool ManualModeFlag = false;
 
     /***** 学習が開始された際に呼ばれる *****/
@@ -86,6 +88,7 @@ public class DEEnvironment : Environment
     // 次に対戦する個体(2つ)をAgentsSetに追加
     void SetStartAgents() {
         //UnityEngine.Random.InitState( name.Length );
+        //childBrainsをキューに変えて捨てていく
         CurrentBrains = new Queue<NNBrain>(childBrains);
         AgentsSet.Clear();
         var size = Math.Min(NAgents, TotalPopulation);
@@ -169,7 +172,7 @@ public class DEEnvironment : Environment
     /***** プレーヤーを動かす *****/
     /***************************/
     private void AgentUpdate(Agent a, NNBrain b) {
-        // ボードの状態を取得
+        // ボードの状態を取得// 3物体の座標
         var observation = a.CollectObservations();
         // NNBrainからactionを取得
         var action = b.GetAction(observation);
