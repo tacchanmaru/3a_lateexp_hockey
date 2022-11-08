@@ -190,7 +190,7 @@ https://qiita.com/n-suzuki/items/b8d4ccc4b6936120567e
   - [x] save
   - [x] 扱えるようにする(toggleのコピー,On Value Changeに追加,CheckBosManager.cs,ComputerPlayer.cs)
 - [] NE
-  - [] Mutateの実装(引数Generationじゃなさそう)
+  - [] Mutateの実装
   - [] CheckBoxManager.cs + toggleで選べるようにする
   - [] manualで遊べるようにする
   - [] elite戦略の実装
