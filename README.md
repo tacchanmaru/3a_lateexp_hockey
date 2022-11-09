@@ -188,11 +188,12 @@ https://qiita.com/n-suzuki/items/b8d4ccc4b6936120567e
 # やること
 - [x] DEBestをmanualで
   - [x] save
-  - [x] 扱えるようにする(toggleのコピー,On Value Changeに追加,CheckBosManager.cs,ComputerPlayer.cs)
+  - [x] 扱えるようにする(toggleのコピー,On Value Changeに追加(player,toggle,checkmark),CheckBosManager.cs,ComputerPlayer.cs)
 - [] NE
-  - [] Mutateの実装
+  - [x] Mutateの実装
   - [] CheckBoxManager.cs + toggleで選べるようにする
-  - [] manualで遊べるようにする
+  - [x] manualで遊べるようにする
+  - [] Awake時にNEBest.txtを参照して学習をスタート
   - [] elite戦略の実装
   - [] crossoverの実装
 - [] Q

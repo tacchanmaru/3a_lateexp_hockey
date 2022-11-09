@@ -164,6 +164,7 @@ public class NEEnvironment : Environment
                 brain = nextBrain
             });
             nextBrain.Save("./Assets/StreamingAssets/ComputerBrains/NECURRENT.txt");
+            // 今回の実装では使用しない
         }
         UpdateText();
     }

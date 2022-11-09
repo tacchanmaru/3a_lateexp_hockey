@@ -50,7 +50,10 @@ public class ComputerPlayer : MonoBehaviour
         Debug.Log("DEBest");
         SetComputerLevel("DEBest");
     }
-
+    public void SetNEBestBrain() {
+        Debug.Log("NEBest");
+        SetComputerLevel("NEBest");
+    }
 
 
     // Update is called once per frame
