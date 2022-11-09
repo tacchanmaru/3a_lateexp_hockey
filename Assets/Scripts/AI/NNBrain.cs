@@ -207,4 +207,44 @@ public class NNBrain : Brain
         newBrain.SetDNA(newDNA);
         return newBrain;
     }
+
+        public NNBrain Mutate(int generation) {
+        var c = new NNBrain(this);
+        for(int i = 0; i < c.HiddenLayers + 1; i++) {
+            c.Biases[i] = MutateLayer(Biases[i], generation);
+            c.Weights[i] = MutateLayer(Weights[i], generation);
+        }
+        return c;
+    }
+
+    private Matrix MutateLayer(Matrix m, int generation) {
+        // mutRateの確率で変化、そのうち5%は子はランダム的な、95%は親中心に小さめの移動
+        var newM = m.Copy();
+        float mutRate = MutRate(generation) + 0.1f;
+        // 0.3より小さくgenerationによって単調減少
+        var mutSize = MutRate(generation) * 0.2f + 0.02f;
+        for(int r = 0; r < m.Row; r++) {
+            for(int c = 0; c < m.Colmun; c++) {
+                var mut = UnityEngine.Random.value;
+                if(mut < mutRate * 0.05) {
+                    var X = UnityEngine.Random.value;
+                    var Y = UnityEngine.Random.value;
+                    var Z1 = (float)Math.Sqrt(-2 * Math.Log(X)) * (float)Math.Cos(2 * Math.PI * Y);
+                    newM[r, c] = Z1;
+                }
+                else if(mut < mutRate) {
+                    var X = UnityEngine.Random.value;
+                    var Y = UnityEngine.Random.value;
+                    var Z1 = (float)Math.Sqrt(-2 * Math.Log(X)) * (float)Math.Cos(2 * Math.PI * Y);
+                    newM[r, c] = m[r, c] + Z1 * mutSize;
+                }
+            }
+        }
+        return newM;
+    }
+
+    private float MutRate(int generation) {
+        return 0.2f * (float)Math.Max(0, 1 - generation / 100);
+    }
+    
 }

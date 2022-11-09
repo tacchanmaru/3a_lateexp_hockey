@@ -3617,6 +3617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Mode: Auto
+  NECheckBox: {fileID: 0}
   EasyCheckBox: {fileID: 1326075784}
   MediumCheckBox: {fileID: 1186959581}
   HardCheckBox: {fileID: 1994431232}
@@ -3693,6 +3694,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1711331775}
   - component: {fileID: 1711331778}
+  - component: {fileID: 1711331779}
   - component: {fileID: 1711331777}
   m_Layer: 0
   m_Name: Environment
@@ -3729,6 +3731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   de: {fileID: 1711331778}
+  ne: {fileID: 1711331779}
   mp: {fileID: 854816724}
   ap: {fileID: 1186848011}
   pm: {fileID: 608054117}
@@ -3745,9 +3748,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47a77180c74e7cb6d9b821f709a759ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalPopulation: 20
+  totalPopulation: 100
   mutationScalingFactor: 0.5
   crossRate: 0.45
+  inputSize: 6
+  hiddenSize: 32
+  hiddenLayers: 1
+  outputSize: 2
+  nAgents: 2
+  GObject1: {fileID: 1917423542}
+  GObject2: {fileID: 1026612532}
+  populationText: {fileID: 975638784}
+  WaitingFlag: 0
+  RestartFlag: 0
+  ManualModeFlag: 0
+--- !u!114 &1711331779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711331773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69961a73002e2bb49b5fc25b73908e41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalPopulation: 100
+  tournamentSelection: 85
+  eliteSelection: 4
   inputSize: 6
   hiddenSize: 32
   hiddenLayers: 1

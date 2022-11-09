@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class NEEnvironment : Environment
 {
+    /***** NE Parameters *****/
     [Header("Settings"), SerializeField] private int totalPopulation = 100;
     private int TotalPopulation { get { return totalPopulation; } }
 
@@ -16,52 +17,66 @@ public class NEEnvironment : Environment
     [SerializeField] private int eliteSelection = 4;
     private int EliteSelection { get { return eliteSelection; } }
 
-    [SerializeField] private int inputSize = 8;
+    [SerializeField] private int inputSize = 6;
     private int InputSize { get { return inputSize; } }
 
-    [SerializeField] private int hiddenSize = 12;
+    [SerializeField] private int hiddenSize = 32;
     private int HiddenSize { get { return hiddenSize; } }
 
-    [SerializeField] private int hiddenLayers = 2;
+    [SerializeField] private int hiddenLayers = 1;
     private int HiddenLayers { get { return hiddenLayers; } }
 
-    [SerializeField] private int outputSize = 4;
+    [SerializeField] private int outputSize = 2;
     private int OutputSize { get { return outputSize; } }
 
-    [SerializeField] private int nAgents = 4;
+    [SerializeField] private int nAgents = 2;
     private int NAgents { get { return nAgents; } }
 
-    [Header("Agent Prefab"), SerializeField] private GameObject GObject;
-
+    [Header("Agent Prefab"), SerializeField] private GameObject GObject1;
+    [Header("Agent Prefab"), SerializeField] private GameObject GObject2;
     [Header("UI References"), SerializeField] private Text populationText = null;
     private Text PopulationText { get { return populationText; } }
 
+    /***** Values for Record *****/
     private float GenBestRecord { get; set; }
-
-    private float SumReward { get; set; }
-    private float AvgReward { get; set; }
-
-    private List<NNBrain> Brains { get; set; } = new List<NNBrain>();
-    private List<GameObject> GObjects { get; } = new List<GameObject>();
-    private List<Agent> Agents { get; } = new List<Agent>();
-    private int Generation { get; set; }
-
+    private float GenSumReward { get; set; }
+    private float GenAvgReward { get; set; }
     private float BestRecord { get; set; }
 
-    private List<AgentPair> AgentsSet { get; } = new List<AgentPair>();
+
+    private List<NNBrain> Brains { get; set; } = new List<NNBrain>();
+    // NEでも親、子あるが、子はGenPopulationで作り、使い捨てる
     private Queue<NNBrain> CurrentBrains { get; set; }
+    // SetStartAgentsでBrainsをQueueに変えるよう
+    private List<GameObject> GObjects { get; } = new List<GameObject>();
+    private List<HockeyAgent> Agents { get; } = new List<HockeyAgent>();
+    private int Generation { get; set; }
+    private List<AgentPair> AgentsSet { get; } = new List<AgentPair>();
+    
+
+    // flag
+    public bool WaitingFlag = false; 
+    // agent交代
+    public bool RestartFlag = false;
+    // goal,時間切れ
+    public bool ManualModeFlag = false;
 
     void Awake() {
+        Debug.Log("AWAKE");
+        if (nAgents != 2) {
+            Debug.Log("Now, nAgents must be equal to 2.");
+            nAgents = 2;
+        }
+
         for(int i = 0; i < TotalPopulation; i++) {
             Brains.Add(new NNBrain(InputSize, HiddenSize, HiddenLayers, OutputSize));
         }
 
-        for(int i = 0; i < NAgents; i++) {
-            var obj = Instantiate(GObject);
-            obj.SetActive(true);
-            GObjects.Add(obj);
-            Agents.Add(obj.GetComponent<Agent>());
-        }
+        GObjects.Add(GObject1);
+        Agents.Add(GObject1.GetComponent<HockeyAgent>());
+        GObjects.Add(GObject2);
+        Agents.Add(GObject2.GetComponent<HockeyAgent>());
+
         SetStartAgents();
     }
 
@@ -77,8 +92,35 @@ public class NEEnvironment : Environment
         }
     }
 
+    public void Inactivate() {
+        ManualModeFlag = true;
+        GObject1.SetActive(false);
+        GObject2.SetActive(false);
+    }
+
+    public void Activate() {
+        ManualModeFlag = false;
+        GObject1.SetActive(true);
+        GObject2.SetActive(true);
+    }
+
+    public void Reset() {
+        WaitingFlag = false;
+    }
+
+    // Agentが変わらない場合はRestart()が呼ばれる
+    /***** Restart() Is Used When Agents Don't Change *****/
+    public void Restart() {
+        RestartFlag = false;
+        AgentsSet.ForEach(p => { p.agent.TimeUp = false; });
+    }
+
     void FixedUpdate() {
+        /*****
+        マイフレーム呼ばれて学習を進める関数
+        ******/
         foreach(var pair in AgentsSet.Where(p => !p.agent.IsDone)) {
+            // 観測・計算・実行
             AgentUpdate(pair.agent, pair.brain);
         }
 
@@ -88,7 +130,10 @@ public class NEEnvironment : Environment
                 BestRecord = Mathf.Max(r, BestRecord);
                 GenBestRecord = Mathf.Max(r, GenBestRecord);
                 p.brain.Reward = r;
-                SumReward += r;
+                GenSumReward += r;
+            }
+            if (p.agent.TimeUp) {
+                RestartFlag = true;
             }
             return p.agent.IsDone;
         });
@@ -118,15 +163,16 @@ public class NEEnvironment : Environment
                 agent = nextAgent,
                 brain = nextBrain
             });
+            nextBrain.Save("./Assets/StreamingAssets/ComputerBrains/NECURRENT.txt");
         }
         UpdateText();
     }
 
     private void SetNextGeneration() {
-        AvgReward = SumReward / TotalPopulation;
+        GenAvgReward = GenSumReward / TotalPopulation;
         //new generation
         GenPopulation();
-        SumReward = 0;
+        GenSumReward = 0;
         GenBestRecord = 0;
         Agents.ForEach(a => a.Reset());
         SetStartAgents();
@@ -140,17 +186,24 @@ public class NEEnvironment : Environment
     }
 
     private void GenPopulation() {
+        /*****
+        新しい世代をNEで生成する
+        *****/
         var children = new List<NNBrain>();
         var bestBrains = Brains.ToList();
-        //Elite selection
         bestBrains.Sort(CompareBrains);
-        File.WriteAllText("BestBrain.json", JsonUtility.ToJson(bestBrains[0]));
-        //bestBrains[0].Save("BestBrain.txt");
+        // File.WriteAllText("BestBrain.json", JsonUtility.ToJson(bestBrains[0]));
+        bestBrains[0].Save("./Assets/StreamingAssets/ComputerBrains/NEBest.txt");
+        // //Elite selection
+        // int ElitePop = 2;
+        // for (int i = 0; i < ElitePop; i++) {
+        //     children.Add(bestBrains[i]);
+        // }
         while(children.Count < TotalPopulation) {
             var tournamentMembers = Brains.AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(tournamentSelection).ToList();
             tournamentMembers.Sort(CompareBrains);
-            //children.Add(tournamentMembers[0].Mutate(Generation));
-            //children.Add(tournamentMembers[1].Mutate(Generation));
+            children.Add(tournamentMembers[0].Mutate(Generation));
+            children.Add(tournamentMembers[1].Mutate(Generation));
         }
         Brains = children;
         Generation++;
@@ -161,12 +214,12 @@ public class NEEnvironment : Environment
             + "\nGeneration: " + (Generation + 1)
             + "\nBest Record: " + BestRecord
             + "\nBest this gen: " + GenBestRecord
-            + "\nAverage: " + AvgReward;
+            + "\nAverage: " + GenAvgReward;
     }
 
     private struct AgentPair
     {
         public NNBrain brain;
-        public Agent agent;
+        public HockeyAgent agent;
     }
 }

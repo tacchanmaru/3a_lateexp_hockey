@@ -186,12 +186,17 @@ https://ja.wikipedia.org/wiki/差分進化
 https://qiita.com/n-suzuki/items/b8d4ccc4b6936120567e
 
 # やること
-- [x] DEの結果のうち最高のものを選べるようにする
-  - [x] セーブする 
+- [x] DEBestをmanualで
+  - [x] save
   - [x] 扱えるようにする(toggleのコピー,On Value Changeに追加,CheckBosManager.cs,ComputerPlayer.cs)
-- [] QEnvironmentおよびNEEnvironmentをDEEnvironmentと同じように1:1で学習する構造に変える, 最も成績いいやつをq,neそれぞれのリンクにsaveする
-- [] Q学習、NE学習の実装を書く
-- [] GameModeManagerで学習の状況を変更
-  - [] Auto:deの代わりにq,neを使えるようにする
-  - [] Manual:apを変更, Awake()内のbrain_txtをq,neでの最も成績の良いやつのリンクに変える
+- [] NE
+  - [] Mutateの実装
+  - [] CheckBoxManager.cs + toggleで選べるようにする
+  - [] manualで遊べるようにする
+  - [] elite戦略の実装
+  - [] crossoverの実装
+- [] Q
 - [] 1:1でそれぞれ好きな機能を選べるような対戦形式にしたい
+
+# 気になること
+- BestRecordの定義にNEEnvironmentではp.agent.Reward,DEEnvironmentではp.agent.Reward + Generation * 10を用いていること
