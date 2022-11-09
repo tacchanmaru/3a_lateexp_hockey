@@ -6,12 +6,14 @@ public class CheckBoxManager : MonoBehaviour
 {
     [SerializeField] private string Mode = "Auto";
     private float prevTimeScale = 1.0f;
+    public GameObject NECheckBox;
     public GameObject EasyCheckBox;
     public GameObject MediumCheckBox;
     public GameObject HardCheckBox;
     public GameObject DECheckBox;
     public GameObject MouseCheckBox;
     public GameObject KeyCheckBox;
+    
 
 
     public string GetMode() {
@@ -23,9 +25,9 @@ public class CheckBoxManager : MonoBehaviour
         EasyCheckBox.SetActive(false);
         MediumCheckBox.SetActive(false);
         HardCheckBox.SetActive(false);
+        DECheckBox.SetActive(false);
         MouseCheckBox.SetActive(false);
         KeyCheckBox.SetActive(false);
-        DECheckBox.SetActive(false);
     }
 
 

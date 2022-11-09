@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameModeManager : MonoBehaviour
 {
     public DEEnvironment de;
+    public NEEnvironment ne;
     public ManualPlayer mp;
     public ComputerPlayer ap;
     public PackManager pm;
@@ -22,12 +23,16 @@ public class GameModeManager : MonoBehaviour
     {
         //学習モードの時、得点が入るとプレイヤー・パックの一をリセット
         if (Mode == "Auto") {
-            if (de.WaitingFlag) {
-                de.Reset();
+            // if (de.WaitingFlag) {
+            if (ne.WaitingFlag) {
+                // de.Reset();
+                ne.Reset();
                 pm.Reset();
             }
-            if (de.RestartFlag) {
-               de.Restart();
+            // if (de.RestartFlag) {
+            if (ne.RestartFlag) {
+            //    de.Restart();
+               ne.Restart();
                pm.Reset();
             }
         }
@@ -48,12 +53,14 @@ public class GameModeManager : MonoBehaviour
             if (Mode == "Auto") {
                 mp.Inactivate();
                 ap.Inactivate();
-                de.Activate();
+                // de.Activate();
+                ne.Activate();
             }
             //学習エージェントを非活性化
             //手動プレイヤー、敵エージェントを活性化
             if (Mode == "Manual") {
-                de.Inactivate();
+                // de.Inactivate();
+                ne.Inactivate();
                 mp.Activate();
                 ap.Activate();
 

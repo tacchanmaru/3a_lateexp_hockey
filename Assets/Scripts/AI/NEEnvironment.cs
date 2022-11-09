@@ -62,6 +62,7 @@ public class NEEnvironment : Environment
     public bool ManualModeFlag = false;
 
     void Awake() {
+        Debug.Log("AWAKE");
         if (nAgents != 2) {
             Debug.Log("Now, nAgents must be equal to 2.");
             nAgents = 2;
@@ -91,6 +92,29 @@ public class NEEnvironment : Environment
         }
     }
 
+    public void Inactivate() {
+        ManualModeFlag = true;
+        GObject1.SetActive(false);
+        GObject2.SetActive(false);
+    }
+
+    public void Activate() {
+        ManualModeFlag = false;
+        GObject1.SetActive(true);
+        GObject2.SetActive(true);
+    }
+
+    public void Reset() {
+        WaitingFlag = false;
+    }
+
+    // Agentが変わらない場合はRestart()が呼ばれる
+    /***** Restart() Is Used When Agents Don't Change *****/
+    public void Restart() {
+        RestartFlag = false;
+        AgentsSet.ForEach(p => { p.agent.TimeUp = false; });
+    }
+
     void FixedUpdate() {
         /*****
         マイフレーム呼ばれて学習を進める関数
@@ -107,6 +131,9 @@ public class NEEnvironment : Environment
                 GenBestRecord = Mathf.Max(r, GenBestRecord);
                 p.brain.Reward = r;
                 GenSumReward += r;
+            }
+            if (p.agent.TimeUp) {
+                RestartFlag = true;
             }
             return p.agent.IsDone;
         });
@@ -175,8 +202,8 @@ public class NEEnvironment : Environment
         while(children.Count < TotalPopulation) {
             var tournamentMembers = Brains.AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(tournamentSelection).ToList();
             tournamentMembers.Sort(CompareBrains);
-            //children.Add(tournamentMembers[0].Mutate(Generation));
-            //children.Add(tournamentMembers[1].Mutate(Generation));
+            children.Add(tournamentMembers[0].Mutate(Generation));
+            children.Add(tournamentMembers[1].Mutate(Generation));
         }
         Brains = children;
         Generation++;
@@ -193,6 +220,6 @@ public class NEEnvironment : Environment
     private struct AgentPair
     {
         public NNBrain brain;
-        public Agent agent;
+        public HockeyAgent agent;
     }
 }

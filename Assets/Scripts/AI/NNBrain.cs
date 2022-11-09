@@ -224,7 +224,7 @@ public class NNBrain : Brain
         // 0.3より小さくgenerationによって単調減少
         var mutSize = MutRate(generation) * 0.2f + 0.02f;
         for(int r = 0; r < m.Row; r++) {
-            for(int c = 0; c < m.Column; c++) {
+            for(int c = 0; c < m.Colmun; c++) {
                 var mut = UnityEngine.Random.value;
                 if(mut < mutRate * 0.05) {
                     var X = UnityEngine.Random.value;
