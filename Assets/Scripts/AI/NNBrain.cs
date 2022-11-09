@@ -208,7 +208,7 @@ public class NNBrain : Brain
         return newBrain;
     }
 
-        public NNBrain Mutate(int generation) {
+    public NNBrain Mutate(int generation) {
         var c = new NNBrain(this);
         for(int i = 0; i < c.HiddenLayers + 1; i++) {
             c.Biases[i] = MutateLayer(Biases[i], generation);
