@@ -1599,6 +1599,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2382038311108471637, guid: 1cd5aaa64335a4235ab283fe3f47f46e,
         type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 2382038311108471637, guid: 1cd5aaa64335a4235ab283fe3f47f46e,
+        type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
@@ -4020,7 +4025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47a77180c74e7cb6d9b821f709a759ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalPopulation: 100
+  totalPopulation: 20
   mutationScalingFactor: 0.5
   crossRate: 0.45
   inputSize: 6
@@ -4046,7 +4051,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69961a73002e2bb49b5fc25b73908e41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalPopulation: 100
+  totalPopulation: 20
   tournamentSelection: 85
   eliteSelection: 4
   inputSize: 6

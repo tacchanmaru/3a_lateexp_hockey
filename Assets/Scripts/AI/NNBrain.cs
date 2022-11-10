@@ -246,5 +246,50 @@ public class NNBrain : Brain
     private float MutRate(int generation) {
         return 0.2f * (float)Math.Max(0, 1 - generation / 100);
     }
-    
+
+    public NNBrain CrossOver(NNBrain pair, int generation) {
+        var c = new NNBrain(this);
+        for(int i = 0; i < c.HiddenLayers + 1; i++) {
+            c.Biases[i] = CrossOverLayer(Biases[i], pair.Biases[i], generation);
+            c.Weights[i] = CrossOverLayer(Weights[i], pair.Weights[i],generation);
+        }
+        return c;
+    }    
+
+    private Matrix CrossOverLayer(Matrix mmain, Matrix mpair, int generation) {
+        // mutRateの確率で変化、そのうち5%は子はランダム的な、95%は親中心に小さめの移動
+        var newM = mmain.Copy();     
+        float crossoverRate = CrossOverRate(generation) + 0.05f;
+        float how_crossoverRate = crossoverRate / 3;
+        // 0.05~0.1,generationによって単調減少
+
+        var cross = UnityEngine.Random.value;
+        if (cross < how_crossoverRate){
+            for(int r = 0; r < newM.Row; r++) {
+                for(int c = 0; c < newM.Colmun; c++) {
+                    newM[r,c] = (mmain[r,c] + mpair[r,c]) * 0.5f;
+                }
+            } 
+        }
+        else if (cross < how_crossoverRate * 2){
+            for(int r = 0; r < newM.Row; r++) {
+                for(int c = 0; c < newM.Colmun; c++) {
+                    newM[r,c] = (3*mmain[r,c] - mpair[r,c]) * 0.5f;
+                }
+            } 
+        }
+        else if (cross < how_crossoverRate){
+            for(int r = 0; r < newM.Row; r++) {
+                for(int c = 0; c < newM.Colmun; c++) {
+                    newM[r,c] = (- mmain[r,c] + 3*mpair[r,c]) * 0.5f;
+                }
+            } 
+        }
+        return newM;
+    }
+
+    private float CrossOverRate(int generation) {
+        return 0.05f * (float)Math.Max(0, 1 - generation / 100);
+    }
+
 }

@@ -196,7 +196,7 @@ public class NEEnvironment : Environment
         // File.WriteAllText("BestBrain.json", JsonUtility.ToJson(bestBrains[0]));
         bestBrains[0].Save("./Assets/StreamingAssets/ComputerBrains/NEBest.txt");
         //Elite selection
-        int ElitePop = 2;
+        int ElitePop = Elite_size();
         for (int i = 0; i < ElitePop; i++) {
             children.Add(bestBrains[0]);
             bestBrains.RemoveAt(0);
@@ -205,11 +205,19 @@ public class NEEnvironment : Environment
         while(children.Count < TotalPopulation) {
             var tournamentMembers = bestBrains.AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(tournamentSelection).ToList();
             tournamentMembers.Sort(CompareBrains);
-            children.Add(tournamentMembers[0].Mutate(Generation));
-            children.Add(tournamentMembers[1].Mutate(Generation));
+            children.Add(tournamentMembers[0].Mutate(Generation).CrossOver(tournamentMembers[1],Generation));
+            children.Add(tournamentMembers[1].Mutate(Generation).CrossOver(tournamentMembers[0],Generation));
+            
         }
         Brains = children;
         Generation++;
+    }
+
+    public int Elite_size(){
+        if (Generation < 10){
+            return 0;
+        }
+        return 2;
     }
 
     private void UpdateText() {

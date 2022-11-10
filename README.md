@@ -194,8 +194,11 @@ https://qiita.com/n-suzuki/items/b8d4ccc4b6936120567e
   - [] CheckBoxManager.cs + toggleで選べるようにする
   - [x] manualで遊べるようにする
   - [] Awake時にNEBest.txtを参照して学習をスタート
-  - [x] elite戦略の実装
-  - [] crossoverの実装
+  - [x] elite戦略の実装(Generation20まで0,以降2)
+  - [x] crossoverの実装
+- [] Generationによって対戦形式を変えたい(1試合のみ, tournament, 総当たり)
+  - [] tournamentの実装
+  - [] 総当たりの実装
 - [] Q
 - [] 1:1でそれぞれ好きな機能を選べるような対戦形式にしたい
 

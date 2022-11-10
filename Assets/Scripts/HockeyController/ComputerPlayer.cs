@@ -8,7 +8,7 @@ public class ComputerPlayer : MonoBehaviour
     private string computer_level;
     private string prev_computer_level;
     private int InputSize = 6;
-    private int HiddenSize = 32;
+    private int HiddenSize = 12;
     private int HiddenLayers = 1;
     private int OutputSize = 2;
 
