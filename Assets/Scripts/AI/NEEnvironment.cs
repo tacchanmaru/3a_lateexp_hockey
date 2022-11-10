@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using UnityEngine.UI;
+using System.Text;
 
 public class NEEnvironment : Environment
 {
@@ -57,22 +58,36 @@ public class NEEnvironment : Environment
     // goal,時間切れ
     public bool ManualModeFlag = false;
 
+    private string GenerationFile = "./Assets/PreBrains/NEBrain/Generation.txt";
+    private string PreBrainFile = "./Assets/PreBrains/NEBrain/NEBrain";
     void Awake() {
         // Debug.Log("AWAKE");
         if (nAgents != 2) {
             Debug.Log("Now, nAgents must be equal to 2.");
             nAgents = 2;
         }
-        
-        for(int i = 0; i < TotalPopulation; i++) {
-            NNBrain SetBrain = new NNBrain(InputSize, HiddenSize, HiddenLayers, OutputSize);
-            if (System.IO.File.Exists("./Assets/PreBrains/NEBrain/NEBrain0.txt")){
-                string filename = "./Assets/PreBrains/NEBrain/NEBrain" + i.ToString() + ".txt";
-                SetBrain.Load(filename);
+        /*****
+        Brainsをセットする
+        *****/
+        if (System.IO.File.Exists(GenerationFile)){
+            StreamReader sr = new StreamReader(GenerationFile, Encoding.GetEncoding("Shift_JIS"));
+            Generation = Int32.Parse(sr.ReadLine());
+            Debug.Log("Start from Generation:");
+            Debug.Log(Generation + 1);
+            for(int i = 0; i < TotalPopulation; i++) {
+                NNBrain SetBrain = new NNBrain(InputSize, HiddenSize, HiddenLayers, OutputSize);
+                string BrainFile = PreBrainFile + i.ToString() + ".txt";
+                SetBrain.Load(BrainFile);
+                Brains.Add(SetBrain);
             }
-            Brains.Add(SetBrain);
         }
-
+        else{
+            for(int i = 0; i < TotalPopulation; i++) {
+                NNBrain SetBrain = new NNBrain(InputSize, HiddenSize, HiddenLayers, OutputSize);
+                Brains.Add(SetBrain);
+            }
+        }
+        
         GObjects.Add(GObject1);
         Agents.Add(GObject1.GetComponent<HockeyAgent>());
         GObjects.Add(GObject2);
@@ -171,11 +186,17 @@ public class NEEnvironment : Environment
 
     private void SetNextGeneration() {
         GenAvgReward = GenSumReward / TotalPopulation;
-        //new generation
+        /*****
+        PreBrainsを利用するためのセーブ
+        *****/
         for (int i = 0; i< totalPopulation; i++){
-            string filename = "./Assets/PreBrains/NEBrain/NEBrain" + i.ToString() + ".txt";
-            Brains[i].Save(filename);
+            string BrainFile = PreBrainFile + i.ToString() + ".txt";
+            Brains[i].Save(BrainFile);
         }
+        using (StreamWriter sw = new StreamWriter(GenerationFile, false, Encoding.GetEncoding("Shift_JIS"))){
+                sw.Write(Generation);
+        }
+        //new generation
         GenPopulation();
         GenSumReward = 0;
         GenBestRecord = 0;
