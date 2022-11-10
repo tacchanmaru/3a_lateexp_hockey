@@ -31,6 +31,9 @@ public class NNBrain : Brain
     [SerializeField] private int outputSize = 0;
     public int OutputSize { get { return outputSize; } private set { outputSize = value; } }
 
+    // match_times flag used for tournamnet 
+    public int match_times = 1;
+
     // DEEnvironmentから行動を取得する際に呼ばれる.
     // actionを返す.
     public double[] GetAction(List<double> observation) {
