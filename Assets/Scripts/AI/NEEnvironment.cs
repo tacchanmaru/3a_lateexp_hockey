@@ -43,6 +43,8 @@ public class NEEnvironment : Environment
 
     private List<NNBrain> Brains { get; set; } = new List<NNBrain>();
     // NEでも親、子あるが、子はGenPopulationで作り、使い捨てる
+    private List<NNBrain> WinnerBrains { get; set; } = new List<NNBrain>();
+    // tournament用
     private Queue<NNBrain> CurrentBrains { get; set; }
     // SetStartAgentsでBrainsをQueueに変えるよう
     private List<GameObject> GObjects { get; } = new List<GameObject>();
@@ -92,7 +94,8 @@ public class NEEnvironment : Environment
         Agents.Add(GObject1.GetComponent<HockeyAgent>());
         GObjects.Add(GObject2);
         Agents.Add(GObject2.GetComponent<HockeyAgent>());
-
+        
+        // tournament用のをここで選びたい
         SetStartAgents();
     }
 
@@ -132,6 +135,9 @@ public class NEEnvironment : Environment
     }
 
     void FixedUpdate() {
+        if (WaitingFlag || RestartFlag || ManualModeFlag) {
+            return;
+        }
         /*****
         マイフレーム呼ばれて学習を進める関数
         ******/
@@ -140,6 +146,10 @@ public class NEEnvironment : Environment
             AgentUpdate(pair.agent, pair.brain);
         }
 
+        // tournamentのため勝者を取っておく
+        NNBrain WinnerBrain = new NNBrain(InputSize, HiddenSize, HiddenLayers, OutputSize);
+        float WinnerReward = 0.0f;
+
         AgentsSet.RemoveAll(p => {
             if(p.agent.IsDone) {
                 float r = p.agent.Reward;
@@ -147,14 +157,24 @@ public class NEEnvironment : Environment
                 GenBestRecord = Mathf.Max(r, GenBestRecord);
                 p.brain.Reward = r;
                 GenSumReward += r;
+                //勝者記録 
+                if (p.brain.Reward > WinnerReward){
+                    WinnerReward = p.brain.Reward;
+                    WinnerBrain = p.brain;
+                }
             }
             if (p.agent.TimeUp) {
                 RestartFlag = true;
             }
             return p.agent.IsDone;
         });
-
-        if(CurrentBrains.Count == 0 && AgentsSet.Count == 0) {
+        
+        if (WinnerReward > 0.0f){
+            WinnerBrains.Add(WinnerBrain);
+        }
+        
+        if(CurrentBrains.Count == 0 && AgentsSet.Count == 0 ) {
+            Debug.Log(WinnerBrains.Count());
             SetNextGeneration();
         }
         else {
@@ -239,7 +259,7 @@ public class NEEnvironment : Environment
     }
 
     public int Elite_size(){
-        if (Generation < 10){
+        if (Generation < 20){
             return 0;
         }
         return 2;
