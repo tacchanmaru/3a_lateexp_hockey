@@ -40,10 +40,11 @@ public class NEEnvironment : Environment
     private float GenSumReward { get; set; }
     private float GenAvgReward { get; set; }
     private float BestRecord { get; set; }
+    private int TotalTournament {get; set;}
 
     private List<NNBrain> Brains { get; set; } = new List<NNBrain>();
     // NEでも親、子あるが、子はGenPopulationで作り、使い捨てる
-    private List<NNBrain> WinnerBrains { get; set; } = new List<NNBrain>();
+    private List<NNBrain> WinnerBrains { get; set; }
     // tournament用
     private Queue<NNBrain> CurrentBrains { get; set; }
     // SetStartAgentsでBrainsをQueueに変えるよう
@@ -95,12 +96,13 @@ public class NEEnvironment : Environment
         GObjects.Add(GObject2);
         Agents.Add(GObject2.GetComponent<HockeyAgent>());
         
-        // tournament用のをここで選びたい
         SetStartAgents();
     }
 
     void SetStartAgents() {
         CurrentBrains = new Queue<NNBrain>(Brains);
+        WinnerBrains = new List<NNBrain>();
+        TotalTournament = TotalPopulation;
         AgentsSet.Clear();
         var size = Math.Min(NAgents, TotalPopulation);
         for(var i = 0; i < size; i++) {
@@ -154,8 +156,10 @@ public class NEEnvironment : Environment
             if(p.agent.IsDone) {
                 float r = p.agent.Reward;
                 BestRecord = Mathf.Max(r, BestRecord);
+                // これは一回一回の試合で決まる方が楽
                 GenBestRecord = Mathf.Max(r, GenBestRecord);
-                p.brain.Reward = r;
+                p.brain.Reward = (p.brain.Reward * (p.brain.match_times-1) + r) / p.brain.match_times;
+                p.brain.match_times ++;
                 GenSumReward += r;
                 //勝者記録 
                 if (p.brain.Reward > WinnerReward){
@@ -172,12 +176,17 @@ public class NEEnvironment : Environment
         if (WinnerReward > 0.0f){
             WinnerBrains.Add(WinnerBrain);
         }
-        
-        if(CurrentBrains.Count == 0 && AgentsSet.Count == 0 ) {
-            Debug.Log(WinnerBrains.Count());
+
+        if(CurrentBrains.Count == 0 && AgentsSet.Count == 0 && WinnerBrains.Count == 1) {
             SetNextGeneration();
         }
-        else {
+
+        else{
+            if(CurrentBrains.Count == 0 && AgentsSet.Count == 0 && WinnerBrains.Count > 1) {
+                CurrentBrains = new Queue<NNBrain>(WinnerBrains);
+                TotalTournament = WinnerBrains.Count();
+                WinnerBrains = new List<NNBrain>();
+            }
             SetNextAgents();
         }
     }
@@ -266,7 +275,7 @@ public class NEEnvironment : Environment
     }
 
     private void UpdateText() {
-        PopulationText.text = "Population: " + (TotalPopulation - CurrentBrains.Count) + "/" + TotalPopulation
+        PopulationText.text = "Population: " + (TotalTournament - CurrentBrains.Count) + "/" + TotalTournament
             + "\nGeneration: " + (Generation + 1)
             + "\nBest Record: " + BestRecord
             + "\nBest this gen: " + GenBestRecord

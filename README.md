@@ -195,14 +195,19 @@ https://qiita.com/n-suzuki/items/b8d4ccc4b6936120567e
   - [x] manualで遊べるようにする
   - [x] elite戦略の実装(Generation20まで0,以降2)
   - [x] crossoverの実装
-  - [] crossoverの線形進化をより賢く
   - [x] Bestの時のBrainデータを元に学習をリスタートする機能
-  - [] Generationによって対戦形式を変える(1試合のみ, tournament) => TotalPopulation = 32
+  - [x] 対戦形式を変える(tournament) => TotalPopulation = 32
+  - [] corssoverの方法賢く
+- [] ルールの変更
+  - [x] 対戦形式を変える(tournament) => TotalPopulation = 32
+  - [] 入力をPackのx,v, 自分のagentのxの六次元のみに
+  - [] rewardを変更して攻撃するように
 - [] UI
   - [] CheckBoxManager.cs + toggleで選べるようにする
   - [x] リスタート時にGenerationを表示する(Debug)
   - [] 1:1でそれぞれ好きな機能を選べるような対戦形式にしたい
   - [] 得点を表示したい(object)
+  - [ GoalEffect
 - [] Q
 
 # 気になること
