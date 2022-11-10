@@ -188,13 +188,18 @@ https://qiita.com/n-suzuki/items/b8d4ccc4b6936120567e
 # やること
 - [x] DEBestをmanualで
   - [x] save
-  - [x] 扱えるようにする(toggleのコピー,On Value Changeに追加,CheckBosManager.cs,ComputerPlayer.cs)
+  - [x] 扱えるようにする(toggleのコピー,On Value Changeに追加(player,toggle,checkmark),CheckBosManager.cs,ComputerPlayer.cs)
 - [] NE
-  - [] Mutateの実装
-  - [] CheckBoxManager.cs + toggleで選べるようにする
-  - [] manualで遊べるようにする
-  - [] elite戦略の実装
-  - [] crossoverの実装
+  - [x] Mutateの実装
+  - [x] manualで遊べるようにする
+  - [x] elite戦略の実装(Generation20まで0,以降2)
+  - [x] crossoverの実装
+  - [] crossoverの線形進化をより賢く
+- [] Bestの時のBrainデータを元に学習をリスタートする機能
+- [] CheckBoxManager.cs + toggleで選べるようにする
+- [] Generationによって対戦形式を変えたい(1試合のみ, tournament) => TotalPopulation = 32
+  - [] tournamentの実装
+  - [] Generationによる制御
 - [] Q
 - [] 1:1でそれぞれ好きな機能を選べるような対戦形式にしたい
 

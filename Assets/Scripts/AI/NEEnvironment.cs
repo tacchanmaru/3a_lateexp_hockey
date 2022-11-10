@@ -164,6 +164,7 @@ public class NEEnvironment : Environment
                 brain = nextBrain
             });
             nextBrain.Save("./Assets/StreamingAssets/ComputerBrains/NECURRENT.txt");
+            // 今回の実装では使用しない
         }
         UpdateText();
     }
@@ -194,19 +195,29 @@ public class NEEnvironment : Environment
         bestBrains.Sort(CompareBrains);
         // File.WriteAllText("BestBrain.json", JsonUtility.ToJson(bestBrains[0]));
         bestBrains[0].Save("./Assets/StreamingAssets/ComputerBrains/NEBest.txt");
-        // //Elite selection
-        // int ElitePop = 2;
-        // for (int i = 0; i < ElitePop; i++) {
-        //     children.Add(bestBrains[i]);
-        // }
+        //Elite selection
+        int ElitePop = Elite_size();
+        for (int i = 0; i < ElitePop; i++) {
+            children.Add(bestBrains[0]);
+            bestBrains.RemoveAt(0);
+        }
+        // Debug.Log(bestBrains.Count);
         while(children.Count < TotalPopulation) {
-            var tournamentMembers = Brains.AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(tournamentSelection).ToList();
+            var tournamentMembers = bestBrains.AsEnumerable().OrderBy(x => Guid.NewGuid()).Take(tournamentSelection).ToList();
             tournamentMembers.Sort(CompareBrains);
-            children.Add(tournamentMembers[0].Mutate(Generation));
-            children.Add(tournamentMembers[1].Mutate(Generation));
+            children.Add(tournamentMembers[0].Mutate(Generation).CrossOver(tournamentMembers[1],Generation));
+            children.Add(tournamentMembers[1].Mutate(Generation).CrossOver(tournamentMembers[0],Generation));
+            
         }
         Brains = children;
         Generation++;
+    }
+
+    public int Elite_size(){
+        if (Generation < 10){
+            return 0;
+        }
+        return 2;
     }
 
     private void UpdateText() {
