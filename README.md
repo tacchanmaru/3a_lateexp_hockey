@@ -202,6 +202,7 @@ https://qiita.com/n-suzuki/items/b8d4ccc4b6936120567e
   - [x] 対戦形式を変える(tournament) => TotalPopulation = 32
   - [x] pm.Reset()を最初に呼ぶことで、最初から動くように
   - [x] 入力をPackのx,v, 自分のagentのxの六次元に
+  - [] 入力のscalingを考える
   - [] 入力をPackのx,v, agentsのxの8次元に
   - [] rewardを変更して攻撃するように
 - [] UI
@@ -209,8 +210,9 @@ https://qiita.com/n-suzuki/items/b8d4ccc4b6936120567e
   - [x] リスタート時にGenerationを表示する(Debug)
   - [] 1:1でそれぞれ好きな機能を選べるような対戦形式にしたい
   - [] 得点を表示したい(object)
-  - [ GoalEffect
+  - [] GoalEffect
 - [] Q
 
 # 気になること
 - BestRecordの定義にNEEnvironmentではp.agent.Reward,DEEnvironmentではp.agent.Reward + Generation * 10を用いていること
+- 

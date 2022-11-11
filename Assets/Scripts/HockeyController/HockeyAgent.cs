@@ -17,7 +17,7 @@ public class HockeyAgent : Agent
     public float BattleTime { get; set; }
     public bool TimeUp = false;
     public string gameState = "onPlaying";
-    private int GoalCounter { get; set; }
+    public int GoalCounter { get; set; }
 
     // パックに当たったか、経過後のカウント
     private bool HitPack = false;

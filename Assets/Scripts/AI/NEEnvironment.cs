@@ -158,7 +158,7 @@ public class NEEnvironment : Environment
                 BestRecord = Mathf.Max(r, BestRecord);
                 // これは一回一回の試合で決まる方が楽
                 GenBestRecord = Mathf.Max(r, GenBestRecord);
-                if (Generation == 1){
+                if (p.agent.GoalCounter == 0){
                     p.brain.Reward = r;
                 }
                 else{
@@ -259,7 +259,7 @@ public class NEEnvironment : Environment
         int ElitePop = Elite_size();
         for (int i = 0; i < ElitePop; i++) {
             children.Add(bestBrains[0]);
-            bestBrains.RemoveAt(0);
+            // bestBrains.RemoveAt(0);
         }
         // Debug.Log(bestBrains.Count);
         while(children.Count < TotalPopulation) {

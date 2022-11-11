@@ -4054,7 +4054,7 @@ MonoBehaviour:
   totalPopulation: 32
   tournamentSelection: 20
   inputSize: 6
-  hiddenSize: 12
+  hiddenSize: 15
   hiddenLayers: 1
   outputSize: 2
   nAgents: 2
