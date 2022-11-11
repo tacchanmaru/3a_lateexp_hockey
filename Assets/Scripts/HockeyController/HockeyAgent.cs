@@ -126,6 +126,8 @@ public class HockeyAgent : Agent
 
         // パックの正面にいればいるほど報酬を追加
         AddReward(1-Mathf.Abs(Pack.transform.position.x - transform.position.x));
+        // パックより後側にいるほど報酬を追加
+        AddReward((Pack.transform.position.z - transform.position.z) * ModeSign);
        
         // ゴールを決めるとプラスの報酬
         if ((ModeSign == 1 && Pack.transform.position.z > 1.03f) || (ModeSign == -1 && Pack.transform.position.z < -1.03f) ) {

@@ -204,7 +204,7 @@ https://qiita.com/n-suzuki/items/b8d4ccc4b6936120567e
   - [x] 入力をPackのx,v, 自分のagentのxの六次元に
   - [] 入力のscalingを考える
   - [] 入力をPackのx,v, agentsのxの8次元に
-  - [] rewardを変更して攻撃するように
+  - [x] rewardの変更 => パックより後ろにいる間報酬
 - [] UI
   - [] CheckBoxManager.cs + toggleで選べるようにする
   - [x] リスタート時にGenerationを表示する(Debug)
