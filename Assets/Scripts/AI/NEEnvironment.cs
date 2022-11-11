@@ -74,7 +74,7 @@ public class NEEnvironment : Environment
         *****/
         if (System.IO.File.Exists(GenerationFile)){
             StreamReader sr = new StreamReader(GenerationFile, Encoding.GetEncoding("Shift_JIS"));
-            Generation = Int32.Parse(sr.ReadLine());
+            Generation = Int32.Parse(sr.ReadLine()) + 1;
             Debug.Log("Start from Generation:");
             Debug.Log(Generation + 1);
             for(int i = 0; i < TotalPopulation; i++) {
@@ -158,7 +158,12 @@ public class NEEnvironment : Environment
                 BestRecord = Mathf.Max(r, BestRecord);
                 // これは一回一回の試合で決まる方が楽
                 GenBestRecord = Mathf.Max(r, GenBestRecord);
-                p.brain.Reward = (p.brain.Reward * (p.brain.match_times-1) + r) / p.brain.match_times;
+                if (Generation == 1){
+                    p.brain.Reward = r;
+                }
+                else{
+                    p.brain.Reward = (p.brain.Reward * (p.brain.match_times-1) + r * 1.5f) / p.brain.match_times;
+                }
                 p.brain.match_times ++;
                 GenSumReward += r;
                 //勝者記録 
@@ -177,12 +182,13 @@ public class NEEnvironment : Environment
             WinnerBrains.Add(WinnerBrain);
         }
 
-        if(CurrentBrains.Count == 0 && AgentsSet.Count == 0 && WinnerBrains.Count == 1) {
+        if(CurrentBrains.Count == 0 && AgentsSet.Count == 0 && (Generation <= 10 || WinnerBrains.Count == 1 )) {
+            WinnerBrains = new List<NNBrain>();
             SetNextGeneration();
         }
 
         else{
-            if(CurrentBrains.Count == 0 && AgentsSet.Count == 0 && WinnerBrains.Count > 1) {
+            if(CurrentBrains.Count == 0 && AgentsSet.Count == 0 && WinnerBrains.Count > 1 ) {
                 CurrentBrains = new Queue<NNBrain>(WinnerBrains);
                 TotalTournament = WinnerBrains.Count();
                 WinnerBrains = new List<NNBrain>();
@@ -268,7 +274,7 @@ public class NEEnvironment : Environment
     }
 
     public int Elite_size(){
-        if (Generation < 20){
+        if (Generation < 10){
             return 0;
         }
         return 2;

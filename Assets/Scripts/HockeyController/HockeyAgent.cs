@@ -75,19 +75,37 @@ public class HockeyAgent : Agent
 
     // Agentへの入力を集める
     public override List<double> CollectObservations() {
+        /*****
+        入力を正規化することを考える.
+        *****/
         var observations = new List<double>();
-        double scalingFactor = 10f;
-
+        double posScalingFactor = 10f;
+        // double posScalingFactor = 2.0f;
+        double velScalingFactor = 2f;
+        // double velScalingFactor = 0.5f;
         var pos = transform.position;
         var pack_pos = Pack.transform.position;
         var opponent_pos = Opponent.transform.position;
 
-        observations.Add(pos.x*scalingFactor);
-        observations.Add(pos.z*scalingFactor*ModeSign);
-        observations.Add((pos.x-pack_pos.x)*scalingFactor);
-        observations.Add((pos.z-pack_pos.z)*scalingFactor*ModeSign);
-        observations.Add(opponent_pos.x*scalingFactor);
-        observations.Add(opponent_pos.z*scalingFactor*ModeSign);
+        observations.Add(pos.x*posScalingFactor);
+        observations.Add(pos.z*posScalingFactor*ModeSign);
+        // observations.Add(pos.z*ModeSign);
+        observations.Add((pos.x-pack_pos.x)*posScalingFactor);
+        observations.Add((pos.z-pack_pos.z)*posScalingFactor*ModeSign);
+        // observations.Add((pos.z-pack_pos.z)*ModeSign);
+        // packの速度情報を入力
+        observations.Add(pack_rb.velocity.x * velScalingFactor);
+        observations.Add(pack_rb.velocity.z * velScalingFactor * ModeSign);
+        // 相手のagentの位置を入力
+        // observations.Add(opponent_pos.x*posScalingFactor);
+        // observations.Add(opponent_pos.z*posScalingFactor*ModeSign);
+        // observations.Add(opponent_pos.x*posScalingFactor);
+        // observations.Add(opponent_pos.z*ModeSign);
+        /*****
+        NNのへの入力は-1~1程度に正規化すると良い
+        ・weightsとbiasesを正規化して扱えるようにするため
+        ・特定の入力が大きすぎるとそれに依存するから
+         *****/
         return observations;
     }
 

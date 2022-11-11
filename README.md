@@ -196,11 +196,13 @@ https://qiita.com/n-suzuki/items/b8d4ccc4b6936120567e
   - [x] elite戦略の実装(Generation20まで0,以降2)
   - [x] crossoverの実装
   - [x] Bestの時のBrainデータを元に学習をリスタートする機能
-  - [x] 対戦形式を変える(tournament) => TotalPopulation = 32
+  - [x] 対戦形式を変える(tournament) => TotalPopulation = 32、rewardをtournament勝ち上がるほど高くなるように
   - [] corssoverの方法賢く
 - [] ルールの変更
   - [x] 対戦形式を変える(tournament) => TotalPopulation = 32
-  - [] 入力をPackのx,v, 自分のagentのxの六次元のみに
+  - [x] pm.Reset()を最初に呼ぶことで、最初から動くように
+  - [x] 入力をPackのx,v, 自分のagentのxの六次元に
+  - [] 入力をPackのx,v, agentsのxの8次元に
   - [] rewardを変更して攻撃するように
 - [] UI
   - [] CheckBoxManager.cs + toggleで選べるようにする

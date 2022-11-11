@@ -16,6 +16,7 @@ public class GameModeManager : MonoBehaviour
     void Start()
     {
        Mode = cbm.GetMode();
+       pm.Reset();
     }
 
     // Update is called once per frame
