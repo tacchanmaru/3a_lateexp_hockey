@@ -213,6 +213,10 @@ https://qiita.com/n-suzuki/items/b8d4ccc4b6936120567e
   - [] GoalEffect
 - [] Q
 
+# 気づいたこと
+- 得点決めた決められたの+,-に比をつけても、攻撃特化守り特化となるとは限らない。例えば-でかくしても初めは攻撃強いやつが勝ち残りそう。
+- 報酬が負の場合もあるから報酬に勝ったやつには下駄を履かせるのが大事。(トーナメント)
+
 # 気になること
 - BestRecordの定義にNEEnvironmentではp.agent.Reward,DEEnvironmentではp.agent.Reward + Generation * 10を用いていること
 - 

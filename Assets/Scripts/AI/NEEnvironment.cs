@@ -158,10 +158,16 @@ public class NEEnvironment : Environment
                 BestRecord = Mathf.Max(r, BestRecord);
                 // これは一回一回の試合で決まる方が楽
                 GenBestRecord = Mathf.Max(r, GenBestRecord);
-                if (p.agent.GoalCounter == 0){
+                if (p.brain.match_times == 1){
                     p.brain.Reward = r;
                 }
                 else{
+                    if (p.brain.Reward < r):
+                        p.brain.Reward = Max(p.brain.Reward * 1.1, p.brain.Reward * 0.9);
+                    else{
+                        float nextReward = p.brain.Reward * (p.brain.match_times-1) + r) / p.brain.match_times;
+                        p.brain.Reward = Max(nextReward * 1.1, nextReward * 0.9);
+                    }
                     p.brain.Reward = (p.brain.Reward * (p.brain.match_times-1) + r * 1.5f) / p.brain.match_times;
                 }
                 p.brain.match_times ++;
